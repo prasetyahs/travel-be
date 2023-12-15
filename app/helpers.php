@@ -43,18 +43,19 @@ function decodeToken($token)
 
 function haversine($lat1, $lon1, $lat2, $lon2)
 {
-    $earthRadius = 6371; // Radius Bumi dalam kilometer
+    $earth_radius = 6371; //dalam kilometer
+    $lat1 = deg2rad($lat1);
+    $lon1 = deg2rad($lon1);
+    $lat2 = deg2rad($lat2);
+    $lon2 = deg2rad($lon2);
 
-    // Menghitung perbedaan latitude dan longitude dalam radian
-    $deltaLat = deg2rad($lat2 - $lat1);
-    $deltaLon = deg2rad($lon2 - $lon1);
+    $delta_lat = $lat2 - $lat1;
+    $delta_lon = $lon2 - $lon1;
 
-    // Menghitung rumus Haversine
-    $a = sin($deltaLat / 2) * sin($deltaLat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($deltaLon / 2) * sin($deltaLon / 2);
+    $a = sin($delta_lat / 2) * sin($delta_lat / 2) + cos($lat1) * cos($lat2) * sin($delta_lon / 2) * sin($delta_lon / 2);
     $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-    // Menghitung jarak
-    $distance = $earthRadius * $c;
+    $distance = $earth_radius * $c;
 
     return $distance;
 }
