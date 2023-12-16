@@ -26,7 +26,7 @@ class AuthController extends Controller
         $credentials =  User::select(['nama', 'email', 'id', 'username', 'password'])->where('email', $req['email'])->first();
         $check = Hash::check($req['password'], $credentials->password);
         if ($check) {
-            $token = encodeToken($req);
+            $token = encodeToken($credentials->toArray());
             return response()->json([
                 'data' => $credentials, "message" => "login Successfully", 'status' => true, 'token' => $token
             ]);

@@ -39,6 +39,7 @@ class UsersController extends Controller
             return response()->json(['data' => $user, 'message' => 'Profile updated successfully', "status" => true]);
         } catch (Exception $e) {
             Log::error("CustomException: " . $e->getMessage());
+            return $e->getMessage();
         }
     }
 }
