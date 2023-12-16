@@ -23,7 +23,7 @@ class AuthController extends Controller
             ]);
         }
         $req =  $request->only("email", 'password');
-        $credentials =  User::select(['nama', 'id', 'username', 'password'])->where('email', $req['email'])->first();
+        $credentials =  User::select(['nama', 'email', 'id', 'username', 'password'])->where('email', $req['email'])->first();
         $check = Hash::check($req['password'], $credentials->password);
         if ($check) {
             $token = encodeToken($req);
