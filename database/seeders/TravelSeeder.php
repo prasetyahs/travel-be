@@ -22,6 +22,7 @@ class TravelSeeder extends Seeder
         foreach ($dataArray as $d) {
             $travel = new Travel();
             $category = Category::where("nama", $d['Category'])->first();
+            
             $travel->name = $d['Place_Name'];
             $travel->description = $d['Description'];
             $travel->city = $d['City'];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -22,8 +23,9 @@ class AuthController extends Controller
             ]);
         }
         $req =  $request->only("email", 'password');
-        $credentials =  User::select(['nama','id','username'])->where('email', $req['email'])->where("password", $req['password'])->first()->toArray();
-        if ($credentials) {
+        $credentials =  User::select(['nama', 'id', 'username', 'password'])->where('email', $req['email'])->first();
+        $check = Hash::check($req['password'], $credentials->password);
+        if ($check) {
             $token = encodeToken($req);
             return response()->json([
                 'data' => $credentials, "message" => "login Successfully", 'status' => true, 'token' => $token

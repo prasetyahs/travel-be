@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TravelController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,8 @@ Route::group(['middleware' => 'check.login', 'prefix' => 'category'], function (
 Route::group(['middleware' => 'check.login', 'prefix' => 'travel'], function () {
     Route::get('/', [TravelController::class, 'index']);
     Route::get('/cluster', [TravelController::class, 'clusteringData']);
+    Route::get('/search', [TravelController::class, 'searchTravel']);
+});
+Route::group(['middleware' => 'check.login', 'prefix' => 'users'], function () {
+    Route::put('/', [UsersController::class, 'editProfile']);
 });

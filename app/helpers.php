@@ -40,6 +40,16 @@ function decodeToken($token)
     }
 }
 
+function userPrincipal($token)
+{
+    try {
+        $decoded = JWT::decode($token, new Key(env("JWT_SECRET"), 'HS256'));
+        return $decoded;
+    } catch (Exception $e) {
+        return null;
+    }
+}
+
 
 function haversine($lat1, $lon1, $lat2, $lon2)
 {
