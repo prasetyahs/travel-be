@@ -39,7 +39,7 @@ class UsersController extends Controller
 
             return response()->json(['data' => $user, 'message' => 'Profile updated successfully', "status" => true]);
         } catch (Exception $e) {
-            return response()->json(['data' => [], 'message' => $e, "status" => false]);
+            return response()->json(['data' => [], 'message' => $e->getMessage(), "status" => false]);
         }
     }
 }
