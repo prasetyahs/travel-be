@@ -66,6 +66,16 @@ class TravelController extends Controller
         ]);
     }
 
+    public function getMaxMinRangePrice()
+    {
+        $data = Travel::select("price")->get()->toArray();
+        $values = array_column($data, 'price');
+        return response()->json([
+            'data' => [
+                "max" => max($values)
+            ], "message" => "Success Load", 'status' => true
+        ]);
+    }
 
     public function clusteringData(Request $request)
     {
@@ -113,7 +123,7 @@ class TravelController extends Controller
     public function searchTravel(Request $request)
     {
         $query = Travel::query();
-        
+
         if ($request->has('category')) {
             $query->where('category', $request->input('category'));
         }
