@@ -140,7 +140,7 @@ class TravelController extends Controller
             $query->where('price', '<=', $request->input('max_price'));
         }
 
-        $results = $query->get();
+        $results = $query->with("category")->with("photos")->with("ratings")->get();
         return response()->json([
             'data' => $results, "message" => "Success Load", 'status' => true, 'total' => count($results)
         ]);
