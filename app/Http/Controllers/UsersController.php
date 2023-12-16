@@ -6,6 +6,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
@@ -34,12 +35,10 @@ class UsersController extends Controller
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->input('password'));
             }
-
             $user->save();
-
             return response()->json(['data' => $user, 'message' => 'Profile updated successfully', "status" => true]);
         } catch (Exception $e) {
-            return response()->json(['data' => [], 'message' => $e->getMessage(), "status" => false]);
+            Log::error("CustomException: " . $e->getMessage());
         }
     }
 }
