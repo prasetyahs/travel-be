@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -14,7 +15,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return view("pages.categories");
+        $data = Category::all();
+        return view("pages.categories",["categories" => $data]);
     }
 
     /**
@@ -24,7 +26,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -34,8 +36,10 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   $category = new Category();
+        $category->nama = $request->categoryName;
+        $category->save();
+        return redirect()->back();
     }
 
     /**
@@ -79,7 +83,9 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->back();
     }
 }

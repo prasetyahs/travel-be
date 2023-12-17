@@ -26,27 +26,34 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach ($users as $index => $item)
+                      
                   <tr>
                     <td style="padding-left:20px">
-                      <p class="text-xs text-secondary mb-0">1.</p>
-                  </td>
-                    <td>
-                      <p class="text-xs text-secondary mb-0">Prasetya Hadi</p>
+                      <p class="text-xs text-secondary mb-0">{{$index+1}}.</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">zaenalbanker@gmail.com</p>
+                      <p class="text-xs text-secondary mb-0">{{$item->nama}}</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Pengguna</p>
+                      <p class="text-xs text-secondary mb-0">{{$item->email}}</p>
+                    </td>
+                    <td>
+                      <p class="text-xs text-secondary mb-0">{{$item->role}}</p>
                     </td>
                     <td class="align-middle">
-                      <a style="padding-right: 20px" href="javascript:;" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Delete
-                      </a>
-                      <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Edit
-                      </a>
-                    </td>
+                      <form method="POST" action="/dashboard/categories/{{$item->id}}" style="display: inline-block;">
+                        @csrf
+                        @method("DELETE")
+                        <button type="submit" class="text-danger font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Delete category">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </form>
+                      <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </tr>
+                    @endforeach
                 </tbody>
               </table>
             </div>

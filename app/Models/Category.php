@@ -13,6 +13,6 @@ class Category extends Model
 
     public function travel()
     {
-        return $this->hasOne(Travel::class,'category');
+        return $this->hasOne(Travel::class,'category_id');
     }
 }

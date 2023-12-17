@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 @section('content')
 <div class="row">
@@ -28,38 +29,48 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach ($travel as $index=> $item)
                   <tr>
                     <td style="padding-left:20px">
-                        <p class="text-xs text-secondary mb-0">1.</p>
+                      <p class="text-xs text-secondary mb-0">{{$index+1}}.</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Taman Mini Indonesia Indah</p>
+                      <p class="text-xs text-secondary mb-0">{{$item->name}}</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit...</p>
+                      <p class="text-xs text-secondary mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;">{{$item->description}}</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Rp. 10.000</p>
+                      <p class="text-xs text-secondary mb-0">Rp. {{ number_format($item->price, 0, ',', '.') }}</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Jakarta</p>
+                      <p class="text-xs text-secondary mb-0">{{$item->city}}</p>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Budaya</p>
+                      <p class="text-xs text-secondary mb-0">{{ $item->category->nama }}</p>
                     </td>
                     <td class="align-middle">
-                      <a style="padding-right: 20px" href="javascript:;" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Delete
-                      </a>
-                      <a href="javascript:;"style="padding-right: 20px" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Edit
-                      </a>
-                      <a href="javascript:;" class="text-success font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Lihat Lokasi
-                      </a>
+                      <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
+                        <i class="fas fa-info-circle"></i>
+                      </button>
+                      <button href="https://www.google.com/maps?q={{$item->lat}},{{$item->lon}}" target="_blank" class="text-success font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit user">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </button>
+                      <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <form method="POST" action="/dashboard/travel/{{$item->id}}" style="display: inline-block;">
+                        @csrf
+                        @method("DELETE")
+                        <button type="submit" class="text-danger font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Delete category">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </form>
                     </td>
-                </tbody>
-              </table>
+                    @endforeach
+                  </tr>
+                  </tbody>
+                </table>
             </div>
           </div>
         </div>

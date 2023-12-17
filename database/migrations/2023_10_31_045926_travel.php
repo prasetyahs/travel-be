@@ -21,7 +21,7 @@ class Travel extends Migration
             $table->string("city");
             $table->string("lat");
             $table->string("lon");
-            $table->unsignedBigInteger('category');
+            $table->unsignedBigInteger('category_id');
             $table->foreign('category')->references('id')->on('category');
             $table->timestamps();
         });

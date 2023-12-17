@@ -15,8 +15,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="{{asset('assets/css/nucleo-svg.css')}}" rel="stylesheet" />
     <!-- CSS Files -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link id="pagestyle" href="{{asset('assets/css/argon-dashboard.css?v=2.0.4')}}" rel="stylesheet" />
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+    <style>
+      .dataTables_wrapper  {
+        margin-left: 25px;
+        margin-right: 25px;
+      }
+      /* .dataTables_paginate .paginate_button:not(.first, .last,.previous,.next ) a {
+          color: white; /* Change to the desired color */
+} */
+
+    </style>
 </head>
   

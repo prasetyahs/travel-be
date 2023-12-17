@@ -9,7 +9,7 @@
                   <h6>Tabel Kategori</h6>
               </div>
               <div class="col-lg-6 d-flex justify-content-end">
-                  <button class="btn btn-dark btn-sm mb-3">Tambah Kategori</button>
+                  <button id="categoriesModal" class="btn btn-dark btn-sm mb-3">Tambah Kategori</button>
               </div>
             </div>
           </div>
@@ -24,27 +24,56 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach ($categories as $index => $item)
                   <tr>
                     <td style="padding-left:20px">
-                      <p class="text-xs text-secondary mb-0">1.</p>
-                  </td>
+                      <p class="text-xs text-secondary mb-0">{{$index+1}}.</p>
+                    </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Budaya</p>
+                      <p class="text-xs text-secondary mb-0">{{$item->nama}}</p>
                     </td>
                     <td class="align-middle">
-                      <a style="padding-right: 20px" href="javascript:;" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Delete
-                      </a>
-                      <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Edit
-                      </a>
-                    </td>
+                      <form method="POST" action="/dashboard/categories/{{$item->id}}" style="display: inline-block;">
+                          @csrf
+                          @method("DELETE")
+                          <button type="submit" class="text-danger font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Delete category">
+                              <i class="fas fa-trash-alt"></i>
+                          </button>
+                      </form>
+                      <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
+                          <i class="fas fa-edit"></i>
+                      </button>
+                  </td>                  
+                    @endforeach
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-</div>
+    </div>
+    <div class="modal" id="categoryModal" tabindex="-2" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="categoryModalLabel">Add Category</h5>
+                  <button type="button" class="close btn btn-link" id="closeCategories" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form id="categoryForm" method="POST">
+                      @csrf
+                      <div class="form-group">
+                          <label for="categoryName">Category Name:</label>
+                          <input name="categoryName" required type="text" class="form-control" id="categoryName" placeholder="Enter category name">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Add Category</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>
+
 
 @endsection

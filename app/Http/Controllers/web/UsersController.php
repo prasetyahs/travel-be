@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -13,8 +14,8 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view("pages/users");
+    {   $data = User::all();
+        return view("pages/users",["users"=>$data]);
     }
 
     /**

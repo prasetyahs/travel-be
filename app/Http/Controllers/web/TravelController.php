@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Travel;
 use Illuminate\Http\Request;
 
 class TravelController extends Controller
@@ -14,7 +15,8 @@ class TravelController extends Controller
      */
     public function index()
     {
-        return view("pages.travel");
+        $data = Travel::with("category")->with("photos")->with("ratings")->get();
+        return view("pages.travel", ["travel" => $data]);
     }
 
     /**
