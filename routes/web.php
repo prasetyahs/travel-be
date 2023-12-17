@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\web\CategoriesController;
+use App\Http\Controllers\web\HomeController;
+use App\Http\Controllers\web\LoginController;
+use App\Http\Controllers\web\ProfileController;
+use App\Http\Controllers\web\TravelController;
+use App\Http\Controllers\web\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource("/",LoginController::class);
+Route::resource("/dashboard/home", HomeController::class);
+Route::resource("/dashboard/categories", CategoriesController::class);
+Route::resource("/dashboard/travel",TravelController::class);
+Route::resource("/dashboard/users",UsersController::class);
+Route::resource("/dashboard/profile",ProfileController::class);
