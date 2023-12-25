@@ -27,7 +27,6 @@
   </script>
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="{{asset('assets/js/argon-dashboard.min.js?v=2.0.4')}}"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
   <script>

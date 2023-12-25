@@ -99,52 +99,35 @@
     </div>
 
     <script>
-      var trace1 = {
-      x: [1, 2, 3, 4, 5],
-      y: [1, 2, 3, 2, 1],
-      z: [1, 2, 3, 2, 1],
-      type: 'scatter3d',
-      mode: 'markers',
-      marker: {
-          color: 'rgba(255, 0, 0, 0.6)',
-          size: 10
-      }
-  };
-  
-  var trace2 = {
-      x: [1.5, 2.5, 3.5, 4.5, 5.5],
-      y: [1, 2, 3, 2, 1],
-      z: [1.5, 2.5, 3.5, 2.5, 1.5],
-      type: 'scatter3d',
-      mode: 'markers',
-      marker: {
-          color: 'rgba(0, 255, 0, 0.6)',
-          size: 15
-      }
-  };
-  
-  var trace3 = {
-      x: [2, 3, 4, 5, 6],
-      y: [1, 2, 3, 2, 1],
-      z: [2, 3, 4, 3, 2],
-      type: 'scatter3d',
-      mode: 'markers',
-      marker: {
-          color: 'rgba(0, 0, 255, 0.6)',
-          size: 20
-      }
-  };
-  var data = [trace1, trace2, trace3];
+       
+        var clusterResult =  {!! $clusterResult !!};
+        var traceData = [];
+
+    // Iterasi melalui setiap cluster
+    clusterResult.forEach(function (cluster, clusterIndex) {
+        // Iterasi melalui setiap data di dalam cluster
+        Object.entries(cluster).forEach(function ([key, dataPoint]) {
+            // Tambahkan data point ke array traceData
+            traceData.push({
+                x: dataPoint[0],  // Price
+                y: dataPoint[2],  // Average Rating
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Cluster ' + key,  // Nama cluster
+                marker: { size: 12 },
+                text: 'Destination ' + key,  // Teks ketika mouse hover
+            });
+        });
+    });
+
+    // Konfigurasi layout plot
     var layout = {
-        width: 600,
-        height: 600,
-        scene: {
-          xaxis: {title: 'X Axis'},
-          yaxis: {title: 'Y Axis'},
-          zaxis: {title: 'Z Axis'}
-        }
+        title: 'Scatter Plot of Clusters',
+        xaxis: { title: 'Price' },
+        yaxis: { title: 'Average Rating' }
     };
-  
-      Plotly.newPlot('scatter-plot', data, layout);  
+
+    // Pemanggilan Plotly
+    Plotly.newPlot('scatter-plot', traceData, layout);
     </script>
 @endsection

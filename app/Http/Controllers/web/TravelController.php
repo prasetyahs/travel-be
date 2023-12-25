@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\PhotoTravel;
 use App\Models\Travel;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ class TravelController extends Controller
     public function index()
     {
         $data = Travel::with("category")->with("photos")->with("ratings")->get();
-        return view("pages.travel", ["travel" => $data]);
+        return view("pages.travel.travel", ["travel" => $data]);
     }
 
     /**
@@ -26,7 +28,9 @@ class TravelController extends Controller
      */
     public function create()
     {
-        //
+        $category = Category::all();
+        $province = getApiData("http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json");
+        return view("pages.travel.travel-add", ["province" => $province, "categories" => $category]);
     }
 
     /**
@@ -37,7 +41,30 @@ class TravelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $travel = new Travel();
+        $travel->name = $request->name;
+        $travel->price = $request->price;
+        $travel->city = $request->city;
+        $travel->category_id = $request->category;
+        $latLong = explode(",", $request->location);
+        $travel->lat =  $latLong[0];
+        $travel->lon = $latLong[1];
+        $travel->description = $request->description;
+        $travel->save();
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('photos', 'public');
+                $photoTravel = new PhotoTravel();
+                $photoTravel->photo = $path;
+                $photoTravel->travel = $travel->id;
+                $photoTravel->save();
+            }
+        }
+        return redirect()->back();
     }
 
     /**
@@ -82,6 +109,8 @@ class TravelController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $travel = Travel::find($id);
+        $travel->delete();
+        return redirect()->back();
     }
 }

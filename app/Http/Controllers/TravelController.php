@@ -8,7 +8,6 @@ use App\Models\Travel;
 use Illuminate\Http\Request;
 use Phpml\Clustering\KMeans;
 
-use function PHPSTORM_META\map;
 
 class TravelController extends Controller
 {
@@ -94,7 +93,7 @@ class TravelController extends Controller
             })->sum();
             $transformData[$d->id] = [
                 $d['price'],
-                $d->category,
+                $d->category->id,
                 round($total / count($d->ratings), 2),
                 round(haversine($lat, $long,  (float)$d->lat,  (float)$d->lon), 2)
             ];

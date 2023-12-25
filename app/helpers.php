@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Phpml\Clustering\KMeans;
+use Illuminate\Support\Facades\Http;
 
 
 function calculateAverageRating(array $ratings)
@@ -68,4 +69,24 @@ function haversine($lat1, $lon1, $lat2, $lon2)
     $distance = $earth_radius * $c;
 
     return $distance;
+}
+
+
+function getApiData($url)
+{
+    try {
+        // Membuat permintaan GET ke API dengan parameter dan header opsional
+        $response = Http::get($url,['verify' => false]);
+        // Memeriksa apakah permintaan berhasil (status code 200)
+        if ($response->successful()) {
+            // Mengembalikan data JSON dari respons API
+            return $response->json();
+        } else {
+            // Menampilkan pesan kesalahan jika permintaan gagal
+            return null;
+        }
+    } catch (\Exception $e) {
+        dd($e);
+        return null;
+    }
 }

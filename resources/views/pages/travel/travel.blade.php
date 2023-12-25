@@ -10,7 +10,7 @@
                   <h6>Tabel Wisata</h6>
               </div>
               <div class="col-lg-6 d-flex justify-content-end">
-                  <button class="btn btn-dark btn-sm mb-3">Tambah Wisata</button>
+                  <a href="travel/create" class="btn btn-dark btn-sm mb-3">Tambah Wisata</a>
               </div>
             </div>
           </div>
@@ -53,9 +53,9 @@
                       <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
                         <i class="fas fa-info-circle"></i>
                       </button>
-                      <button href="https://www.google.com/maps?q={{$item->lat}},{{$item->lon}}" target="_blank" class="text-success font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit user">
+                      <a href="https://www.google.com/maps?q={{$item->lat}},{{$item->lon}}" target="_blank" class="text-success font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit user">
                         <i class="fas fa-map-marker-alt"></i>
-                      </button>
+                      </a>
                       <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
                         <i class="fas fa-edit"></i>
                       </button>
