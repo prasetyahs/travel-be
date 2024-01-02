@@ -14,10 +14,15 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   $data = User::all();
-        return view("pages/users",["users"=>$data]);
+    {
+        $data = User::all();
+        return view("pages/users", ["users" => $data]);
     }
 
+    public function logout(Request $request)
+    {
+        $request->session()->forget('users');
+    }
     /**
      * Show the form for creating a new resource.
      *

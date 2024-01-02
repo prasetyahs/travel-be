@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -14,7 +18,42 @@ class LoginController extends Controller
      */
     public function index()
     {
+        $session = session();
+        if ($session->has('users')) {
+            return redirect("/dashboard/home");
+        }
         return view("pages.login");
+    }
+
+
+    public function login(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ], [
+            'email.required' => "Email Wajib diisi",
+            'password.required' => "Password Wajib diisi"
+        ]);
+
+        if ($validator->fails()) {
+            toast($validator->errors()->first(), 'error');
+            return redirect()->back();
+        }
+        $req =  $request->only("email", 'password');
+        $credentials =  User::select(['nama', 'email', 'id', 'password', 'role'])->where('email', $req['email'])->first();
+        if ($credentials->role != 'admin') {
+            toast('Akun anda bukan admin', 'error');
+            return redirect()->back();
+        }
+        $check = Hash::check($req['password'], $credentials->password);
+        if ($check) {
+            session(['users' => $credentials]);
+            return redirect("/dashboard/home");
+        }
+        toast('Login gagal, Cek username dan password anda', 'error');
+        return redirect()->back();
     }
 
     /**

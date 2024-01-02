@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::resource("/",LoginController::class);
-Route::resource("/dashboard/home", HomeController::class);
-Route::resource("/dashboard/categories", CategoriesController::class);
-Route::resource("/dashboard/travel",TravelController::class);
-Route::resource("/dashboard/users",UsersController::class);
-Route::resource("/dashboard/profile",ProfileController::class);
+
+Route::resource("/", LoginController::class);
+Route::post("/login", [LoginController::class, 'login']);
+Route::get('/dashboard/logout', [UsersController::class, 'logout'])->middleware("check.auth");
+Route::resource("/dashboard/home", HomeController::class)->middleware("check.auth");
+Route::resource("/dashboard/categories", CategoriesController::class)->middleware("check.auth");
+Route::resource("/dashboard/travel", TravelController::class)->middleware("check.auth");
+Route::resource("/dashboard/users", UsersController::class)->middleware("check.auth");
+Route::resource("/dashboard/profile", ProfileController::class)->middleware("check.auth");

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Rating;
 use App\Models\Travel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Phpml\Clustering\KMeans;
 
@@ -17,6 +20,10 @@ class HomeController extends Controller
     public function index()
     {
         $data = Travel::with("category")->with("photos")->with("ratings")->limit(5)->get();
+        $totalTravel = Travel::count();
+        $totalCategory = Category::count();
+        $totalRating = Rating::count();
+        $totalUser = User::count();
         $transformData = [];
         $clusterLabel = [];
         foreach ($data as $d) {
@@ -33,7 +40,12 @@ class HomeController extends Controller
         $kmeans = new KMeans(3);
         $clusterResult =  $kmeans->cluster($transformData);
         // return json_encode($clusterResult);
-        return view("pages.dashboard", ['clusterResult' => json_encode($clusterResult), "clusterLabel" => json_encode($clusterLabel)]);
+        return view("pages.dashboard", ['clusterResult' => json_encode($clusterResult), "clusterLabel" => json_encode($clusterLabel), 'count' => [
+            "totalCategory" => $totalCategory,
+            "totalRating" => $totalRating,
+            "totalUser" => $totalUser,
+            "totalTravel" => $totalTravel
+        ]]);
     }
 
     /**

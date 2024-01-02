@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use App\Models\Travel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Phpml\Clustering\KMeans;
 
 
@@ -124,7 +125,7 @@ class TravelController extends Controller
         $query = Travel::query();
 
         if ($request->has('category')) {
-            $query->where('category', $request->input('category'));
+            $query->where('category_id', $request->input('category'));
         }
 
         if ($request->has('city')) {
