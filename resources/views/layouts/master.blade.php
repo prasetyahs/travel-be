@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('includes.head')
+
 <body class="g-sidenav-show   bg-gray-100">
     <div class="min-height-300 bg-primary position-absolute w-100"></div>
     @include('includes.sidebar')
@@ -49,6 +50,17 @@
             });
             $("#closeCategories").click(function() {
                 $('#categoryModal').modal('hide');
+            })
+            $(".categoriesModalEdit").click(function() {
+                var name = $(this).data('name');
+                var id = $(this).data('id');
+                $('#categoryNameEdit').val(name);
+                $('#actionEditForm').attr("action",
+                    "/dashboard/categories/" + id);
+                $('#categoryEditModal').modal('show');
+            });
+            $("#closeCategoriesEdit").click(function() {
+                $('#categoryEditModal').modal('hide');
             })
         });
     </script>

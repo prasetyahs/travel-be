@@ -50,9 +50,9 @@
                       <p class="text-xs text-secondary mb-0">{{ $item->category->nama }}</p>
                     </td>
                     <td class="align-middle">
-                      <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
+                      <a href="{{route("travel.show",['travel'=>$item->id])}}" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
                         <i class="fas fa-info-circle"></i>
-                      </button>
+                      </a>
                       <a href="https://www.google.com/maps?q={{$item->lat}},{{$item->lon}}" target="_blank" class="text-success font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit user">
                         <i class="fas fa-map-marker-alt"></i>
                       </a>

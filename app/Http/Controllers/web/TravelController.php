@@ -75,6 +75,8 @@ class TravelController extends Controller
      */
     public function show($id)
     {
+        $data = Travel::with("category")->with("photos")->with("ratings")->find($id);
+        return view("pages.travel.travel-detail", ['travel' => $data]);
     }
 
     /**

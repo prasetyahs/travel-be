@@ -5,6 +5,9 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+use function PHPUnit\Framework\returnSelf;
 
 class UsersController extends Controller
 {
@@ -30,7 +33,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages/users-add');
     }
 
     /**
@@ -41,7 +44,17 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "*" => "required"
+        ]);
+        if ($validator->fails()) {
+            toast($validator->errors()->first(), 'error');
+            return redirect()->back();
+        }
+        $request = $request->except("_token");
+        User::create($request);
+        toast("Berhasil Menambahkan user", "success");
+        return redirect()->back();
     }
 
     /**
@@ -63,7 +76,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view("pages.users-edit", ['user' => $id, 'user' => $user]);
     }
 
     /**
@@ -75,7 +89,12 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $request = $request->except("_token", "_method");
+        $request['password']  = $request['password'] ?? $user->password;
+        $user->update($request);
+        toast("Berhasil Update User", 'success');
+        return redirect()->back();
     }
 
     /**
@@ -86,6 +105,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        toast("Berhasil Delete Users", 'success');
+        return redirect()->back();
     }
 }
