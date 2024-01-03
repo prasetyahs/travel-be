@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use function PHPUnit\Framework\returnSelf;
@@ -52,6 +53,7 @@ class UsersController extends Controller
             return redirect()->back();
         }
         $request = $request->except("_token");
+        $request['password'] =  Hash::make($request['password']);
         User::create($request);
         toast("Berhasil Menambahkan user", "success");
         return redirect()->back();
@@ -91,7 +93,7 @@ class UsersController extends Controller
     {
         $user = User::find($id);
         $request = $request->except("_token", "_method");
-        $request['password']  = $request['password'] ?? $user->password;
+        $request['password'] = Hash::make($request['password']) ?? $user->password;
         $user->update($request);
         toast("Berhasil Update User", 'success');
         return redirect()->back();
