@@ -9,7 +9,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Wisata</p>
                                 <h5 class="font-weight-bolder">
-                                    {{$count['totalTravel']}}
+                                    {{ $count['totalTravel'] }}
                                 </h5>
                             </div>
                         </div>
@@ -99,40 +99,59 @@
         </div>
 
         <script>
-            var clusterResult = {!! $clusterResult !!};
-            var traceData = [];
-
-            // Iterasi melalui setiap cluster
-            clusterResult.forEach(function(cluster, clusterIndex) {
-                // Iterasi melalui setiap data di dalam cluster
-                Object.entries(cluster).forEach(function([key, dataPoint]) {
-                    // Tambahkan data point ke array traceData
-                    traceData.push({
-                        x: dataPoint[0], // Price
-                        y: dataPoint[2], // Average Rating
-                        mode: 'markers',
-                        type: 'scatter',
-                        name: 'Cluster ' + key, // Nama cluster
-                        marker: {
-                            size: 12
-                        },
-                        text: 'Destination ' + key, // Teks ketika mouse hover
+            const rawData = {!! $clusterResult !!};
+            const labels = {!! $clusterLabel !!};
+            // Process data for Plotly
+            const scatterData = [];
+            rawData.forEach((entry, groupIndex) => {
+                Object.keys(entry).forEach(key => {
+                    const [x, y, z] = entry[key];
+                    scatterData.push({
+                        x,
+                        y,
+                        z,
+                        text: labels[key],
+                        group: groupIndex // Assign a unique group index to each group
                     });
                 });
             });
 
-            // Konfigurasi layout plot
-            var layout = {
-                title: 'Scatter Plot of Clusters',
-                xaxis: {
-                    title: 'Price'
+            // Define colors for each group
+            const groupColors = ['red', 'green', 'blue', 'purple', 'orange', 'pink'];
+
+            // Create scatter plot
+            const layout = {
+                title: 'Overview Cluster',
+                scene: {
+                    xaxis: {
+                        title: 'Price'
+                    },
+                    yaxis: {
+                        title: 'Category'
+                    },
+                    zaxis: {
+                        title: 'Rating'
+                    }
                 },
-                yaxis: {
-                    title: 'Average Rating'
-                }
+                autosize: true,
+                height: 700,
+                width : 700
             };
 
-            // Pemanggilan Plotly
-            Plotly.newPlot('scatter-plot', traceData, layout);
+            const trace = scatterData.map(point => ({
+                type: 'scatter3d',
+                mode: 'markers',
+                x: [point.x],
+                y: [point.y],
+                z: [point.z],
+                text: [point.text],
+                marker: {
+                    size: 4,
+                    color: groupColors[point.group % groupColors.length] || 'gray' // Use a color or default to gray
+                },
+                showlegend: false
+            }));
+
+            Plotly.newPlot('scatter-plot', trace, layout);
         </script>
     @endsection

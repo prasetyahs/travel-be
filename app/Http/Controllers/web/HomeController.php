@@ -19,7 +19,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data = Travel::with("category")->with("photos")->with("ratings")->limit(5)->get();
+        $data = Travel::with("category")->with("photos")->with("ratings")->limit(200)->get();
         $totalTravel = Travel::count();
         $totalCategory = Category::count();
         $totalRating = Rating::count();
@@ -37,9 +37,8 @@ class HomeController extends Controller
             ];
             $clusterLabel[] = $d['name'];
         }
-        $kmeans = new KMeans(3);
+        $kmeans = new KMeans(4);
         $clusterResult =  $kmeans->cluster($transformData);
-        // return json_encode($clusterResult);
         return view("pages.dashboard", ['clusterResult' => json_encode($clusterResult), "clusterLabel" => json_encode($clusterLabel), 'count' => [
             "totalCategory" => $totalCategory,
             "totalRating" => $totalRating,
