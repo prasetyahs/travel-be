@@ -75,7 +75,6 @@ class TravelController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -86,7 +85,10 @@ class TravelController extends Controller
      */
     public function edit($id)
     {
-        //
+        $travel = Travel::with('category')->find($id);
+        $category = Category::all();
+        $province = getApiData("http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json");
+        return view("pages.travel.travel-edit", ["province" => $province, "categories" => $category, "travel" => $travel, "id" => $id]);
     }
 
     /**
@@ -98,7 +100,31 @@ class TravelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $travel = Travel::find($id);
+        $travel->name = $request->name ?? $travel->name;
+        $travel->price = $request->price ?? $travel->price;
+        $travel->city = $request->city ?? $travel->city;
+        $travel->category_id = $request->category ?? $travel->category_id;
+        $latLong = explode(",", $request->location);
+        $travel->lat =  $latLong[0];
+        $travel->lon = $latLong[1];
+        $travel->description = $request->description ?? $travel->description;
+        $travel->save();
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('photos', 'public');
+                $photoTravel = new PhotoTravel();
+                $photoTravel->photo = $path;
+                $photoTravel->travel = $travel->id;
+                $photoTravel->save();
+            }
+        }
+        toast("Berhasil Update Travel", 'success');
+        return redirect()->back();
     }
 
     /**

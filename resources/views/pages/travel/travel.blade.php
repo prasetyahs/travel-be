@@ -56,9 +56,9 @@
                       <a href="https://www.google.com/maps?q={{$item->lat}},{{$item->lon}}" target="_blank" class="text-success font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit user">
                         <i class="fas fa-map-marker-alt"></i>
                       </a>
-                      <button href="javascript:;" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
+                      <a href="{{ route('travel.edit', ['travel' => $item->id]) }}" class="text-secondary font-weight-bold text-xs btn" data-toggle="tooltip" data-original-title="Edit category">
                         <i class="fas fa-edit"></i>
-                      </button>
+                      </a>
                       <form method="POST" action="/dashboard/travel/{{$item->id}}" style="display: inline-block;">
                         @csrf
                         @method("DELETE")
