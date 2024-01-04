@@ -48,8 +48,7 @@ class TravelController extends Controller
                 $d['distance'] = round(haversine($lat, $long, $d->lat, $d->lon), 2);
                 $data[] = $d;
             }
-            $data = collect($data)->sortBy("distance");
-            $data = $data->values()->take(4);
+            $data = collect($data)->sortBy('distance')->unique('id')->take(4)->values();
             $total = count($data);
         }
         if ($isPopular == 1) {
@@ -57,8 +56,7 @@ class TravelController extends Controller
                 $d['total_review'] = count($d['ratings']);
                 $data[] = $d;
             }
-            $data = collect($data)->sortByDesc("total_review");
-            $data = $data->values()->take(3);
+            $data = collect($data)->sortByDesc("total_review")->unique('id')->take(3)->values();
             $total = count($data);
         }
         return response()->json([
