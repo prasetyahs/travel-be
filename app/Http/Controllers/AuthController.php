@@ -35,4 +35,30 @@ class AuthController extends Controller
             'data' => [], "message" => "Login error", 'status' => false
         ]);
     }
+
+    public function registration(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            '*' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => [], "message" => $validator->errors()->first(), 'status' => false
+            ]);
+        }
+        $request = $request->all();
+        $checkDuplicate = User::where("email", $request['email'])->first();
+        if ($checkDuplicate) {
+            return response()->json([
+                'data' => [], "message" => 'email is already in use', 'status' => false
+            ]);
+        }
+        $request['password'] = Hash::make($request['password']);
+        $user = new User();
+        $user->create($request);
+        return response()->json([
+            'data' => $request, "message" => "Register Success", 'status' => true
+        ]);
+    }
 }
