@@ -79,9 +79,9 @@ class TravelController extends Controller
     {
         $limit = $request->get("limit");
         $page = $request->get('page');
-        $data = Travel::with("category")->with("photos")->with("ratings")->paginate($limit, ['*'], 'page', $page);
-        $totalData = $data->total();
-        $data = $data->items();
+        $data = Travel::with("category")->with("photos")->with("ratings")->get();
+        $totalData = count($data);
+        $data = $data;
         $lat = $request->get("my_lat");
         $long = $request->get("my_long");
         $k = $request->get("k");
@@ -112,7 +112,7 @@ class TravelController extends Controller
                 }
             }
         }
-        $result =  collect($result)->sortBy("distance")->sortBy("num_of_cluster")->values()->all();
+        $result = collect($result)->sortBy("distance")->take(20)->values()->all();
         return response()->json([
             'data' => $result, "message" => "Success Load", 'status' => true, 'total' => $totalData
         ]);

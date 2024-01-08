@@ -37,7 +37,7 @@ class HomeController extends Controller
             ];
             $clusterLabel[] = $d['name'];
         }
-        $kmeans = new KMeans(4);
+        $kmeans = new KMeans(3);
         $clusterResult =  $kmeans->cluster($transformData);
         return view("pages.dashboard", ['clusterResult' => json_encode($clusterResult), "clusterLabel" => json_encode($clusterLabel), 'count' => [
             "totalCategory" => $totalCategory,
