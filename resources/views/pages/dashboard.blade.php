@@ -133,7 +133,7 @@
 
             // Create scatter plot
             const layout = {
-                title: 'Overview Cluster',
+                title: 'Kmeans Cluster',
                 scene: {
                     xaxis: {
                         title: 'Price'
@@ -197,6 +197,7 @@
                     });
 
                     const layout = {
+                        title: 'Meanshift Cluster',
                         scene: {
                             xaxis: {
                                 title: 'Price'
