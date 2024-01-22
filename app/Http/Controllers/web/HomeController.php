@@ -25,6 +25,7 @@ class HomeController extends Controller
         $totalRating = Rating::count();
         $totalUser = User::count();
         $transformData = [];
+        $transformData2 = [];
         $clusterLabel = [];
         foreach ($data as $d) {
             $total =  collect($d->ratings)->map(function ($v) {
@@ -35,8 +36,15 @@ class HomeController extends Controller
                 $d->category->id,
                 round($total / count($d->ratings), 2),
             ];
+            $transformData2[] = [
+                $d['price'],
+                $d->category->id,
+                round($total / count($d->ratings), 2),
+                $d->name
+            ];
             $clusterLabel[] = $d['name'];
         }
+        file_put_contents(storage_path('data.json'), json_encode(['data' => $transformData2]));
         $kmeans = new KMeans(3);
         $clusterResult =  $kmeans->cluster($transformData);
         return view("pages.dashboard", ['clusterResult' => json_encode($clusterResult), "clusterLabel" => json_encode($clusterLabel), 'count' => [

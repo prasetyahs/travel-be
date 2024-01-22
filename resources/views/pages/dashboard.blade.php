@@ -94,15 +94,28 @@
                 </div>
                 <div class="card-body p-3 d-flex justify-content-center align-items-center">
                     <div id="scatter-plot"></div>
+                    <div id="meanshift-plot"></div>
                 </div>
             </div>
         </div>
 
         <script>
+            const labelsText = {!! $clusterLabel !!};
+            const groupColors = ['red', 'green', 'blue', 'purple', 'orange', 'pink'];
+
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
             const rawData = {!! $clusterResult !!};
-            const labels = {!! $clusterLabel !!};
             // Process data for Plotly
             const scatterData = [];
+            const newLabel = [];
             rawData.forEach((entry, groupIndex) => {
                 Object.keys(entry).forEach(key => {
                     const [x, y, z] = entry[key];
@@ -110,14 +123,13 @@
                         x,
                         y,
                         z,
-                        text: labels[key],
+                        text: labelsText[key],
                         group: groupIndex // Assign a unique group index to each group
                     });
                 });
             });
 
             // Define colors for each group
-            const groupColors = ['red', 'green', 'blue', 'purple', 'orange', 'pink'];
 
             // Create scatter plot
             const layout = {
@@ -134,8 +146,8 @@
                     }
                 },
                 autosize: true,
-                height: 700,
-                width : 700
+                height: 600,
+                width: 600
             };
 
             const trace = scatterData.map(point => ({
@@ -153,5 +165,59 @@
             }));
 
             Plotly.newPlot('scatter-plot', trace, layout);
+            fetch('http://localhost:5000/clusters')
+                .then(response => response.json())
+                .then(data => {
+                    // Extract data for plotting
+                    const clusters = data.clusters;
+                    // Create a 3D scatter plot using Plotly
+                    const trace = {
+                        type: 'scatter3d',
+                        mode: 'markers',
+                        x: [],
+                        y: [],
+                        z: [],
+                        text: [],
+                        marker: {
+                            size: 5,
+                            color: [],
+                            opacity: 0.8
+                        }
+                    };
+                    clusters.forEach(cluster => {
+                        const clusterData = cluster.data;
+                        const clusterId = cluster.cluster_id;
+                        // Append cluster data to the trace
+                        trace.x = trace.x.concat(clusterData.map(point => point[0]));
+                        trace.y = trace.y.concat(clusterData.map(point => point[1]));
+                        trace.z = trace.z.concat(clusterData.map(point => point[2]));
+                        trace.text = trace.text.concat(Array(clusterData.length).fill(labelsText));
+                        const randomColor = getRandomColor();
+                        trace.marker.color = trace.marker.color.concat(Array(clusterData.length).fill(randomColor));
+                    });
+
+                    const layout = {
+                        scene: {
+                            xaxis: {
+                                title: 'Price'
+                            },
+                            yaxis: {
+                                title: 'Category'
+                            },
+                            zaxis: {
+                                title: 'Rating'
+                            }
+                        },
+                        autosize: true,
+                        height: 600,
+                        width: 600
+                    };
+
+                    const plotConfig = {
+                        responsive: true
+                    };
+                    Plotly.newPlot('meanshift-plot', [trace], layout, plotConfig);
+                })
+                .catch(error => console.error('Error fetching data:', error));
         </script>
     @endsection
