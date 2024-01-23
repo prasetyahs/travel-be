@@ -34,6 +34,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link {{Request::is('dashboard/wilayah') ? 'active' : ''}}" href="/dashboard/wilayah">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fas fa-list text-success" style="font-size: 15px;"></i>
+            </div>
+            <span class="nav-link-text ms-1">Cluster Wilayah</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link {{Request::is('dashboard/users') ? 'active' : ''}}" href="/dashboard/users">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fas fa-users text-info" style="font-size: 15px;"></i>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClusterWilayah;
 use App\Http\Controllers\web\CategoriesController;
 use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\LoginController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\web\ProfileController;
 use App\Http\Controllers\web\TravelController;
 use App\Http\Controllers\web\UsersController;
 use Illuminate\Support\Facades\Route;
+use Phpml\Clustering\KMeans\Cluster;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +24,10 @@ use Illuminate\Support\Facades\Route;
 Route::resource("/", LoginController::class);
 Route::post("/login", [LoginController::class, 'login']);
 Route::get('/dashboard/logout', [UsersController::class, 'logout'])->middleware("check.auth");
+Route::get("/dashboard/wilayah/get-wilayah", [ClusterWilayah::class, "getByWilayah"]);
 Route::resource("/dashboard/home", HomeController::class)->middleware("check.auth");
 Route::resource("/dashboard/categories", CategoriesController::class)->middleware("check.auth");
 Route::resource("/dashboard/travel", TravelController::class)->middleware("check.auth");
 Route::resource("/dashboard/users", UsersController::class)->middleware("check.auth");
 Route::resource("/dashboard/profile", ProfileController::class)->middleware("check.auth");
+Route::resource("/dashboard/wilayah", ClusterWilayah::class)->middleware("check.auth");

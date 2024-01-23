@@ -26,7 +26,7 @@ class TravelController extends Controller
         $isPopular = $request->get('isPopular');
         $lat = $request->get("my_lat");
         $long = $request->get("my_long");
-        $data = Travel::with("category")->with("photos")->with("ratings");
+        $data = Travel::with("category")->with("photos")->with("ratings")->withAvg("ratings", "num_of_rating");
         $total = 0;
         if ($categoryID) {
             $data = $data->where("category", $categoryID ?? "");
@@ -48,7 +48,7 @@ class TravelController extends Controller
                 $d['distance'] = round(haversine($lat, $long, $d->lat, $d->lon), 2);
                 $data[] = $d;
             }
-            $data = collect($data)->sortBy('distance')->unique('id')->take(4)->values();
+            $data = collect($data)->sortByDesc('ratings_avg_num_of_rating')->unique('id')->take(10)->values();
             $total = count($data);
         }
         if ($isPopular == 1) {
@@ -56,7 +56,7 @@ class TravelController extends Controller
                 $d['total_review'] = count($d['ratings']);
                 $data[] = $d;
             }
-            $data = collect($data)->sortByDesc("total_review")->unique('id')->take(3)->values();
+            $data = collect($data)->sortByDesc("ratings_avg_num_of_rating")->unique('id')->take(10)->values();
             $total = count($data);
         }
         return response()->json([

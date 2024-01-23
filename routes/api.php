@@ -27,15 +27,15 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', [AuthController::class, 'registration']);
 });
 
-Route::group(['middleware' => 'check.login', 'prefix' => 'category'], function () {
+Route::group(['prefix' => 'category'], function () {
     Route::get('/', [CategoryController::class, 'index']);
 });
-Route::group(['middleware' => 'check.login', 'prefix' => 'travel'], function () {
+Route::group(['prefix' => 'travel'], function () {
     Route::get('/', [TravelController::class, 'index']);
     Route::get('/cluster', [TravelController::class, 'clusteringData']);
     Route::get('/search', [TravelController::class, 'searchTravel']);
     Route::get("/range-price", [TravelController::class, 'getMaxMinRangePrice']);
 });
-Route::group(['middleware' => 'check.login', 'prefix' => 'users'], function () {
+Route::group(['prefix' => 'users'], function () {
     Route::put('/', [UsersController::class, 'editProfile']);
 });
