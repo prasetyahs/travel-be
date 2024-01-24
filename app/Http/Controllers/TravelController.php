@@ -29,7 +29,7 @@ class TravelController extends Controller
         $data = Travel::with("category")->with("photos")->with("ratings")->withAvg("ratings", "num_of_rating");
         $total = 0;
         if ($categoryID) {
-            $data = $data->where("category", $categoryID ?? "");
+            $data = $data->where("category_id", $categoryID ?? "");
         }
         if ($page) {
             $data = $data->paginate(5, ['*'], 'page', $page);
@@ -64,6 +64,14 @@ class TravelController extends Controller
         ]);
     }
 
+    public function getLocation()
+    {
+        $data = Travel::select("city")->distinct()->get();
+
+        return response()->json([
+            'data' => $data, "message" => "Success Load", 'status' => true
+        ]);
+    }
     public function getMaxMinRangePrice()
     {
         $data = Travel::select("price")->get()->toArray();

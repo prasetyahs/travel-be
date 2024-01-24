@@ -35,6 +35,7 @@ Route::group(['prefix' => 'travel'], function () {
     Route::get('/cluster', [TravelController::class, 'clusteringData']);
     Route::get('/search', [TravelController::class, 'searchTravel']);
     Route::get("/range-price", [TravelController::class, 'getMaxMinRangePrice']);
+    Route::get("/get-location", [TravelController::class, 'getLocation']);
 });
 Route::group(['prefix' => 'users'], function () {
     Route::put('/', [UsersController::class, 'editProfile']);
