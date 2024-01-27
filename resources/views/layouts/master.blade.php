@@ -30,6 +30,7 @@
     <script src="{{ asset('assets/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+
     @include('sweetalert::alert', ['cdn' => 'https://cdn.jsdelivr.net/npm/sweetalert2@9'])
     <script>
         $(document).ready(function() {

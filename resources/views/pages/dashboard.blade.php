@@ -93,13 +93,35 @@
                     <h6 class="text-capitalize">Ringkasan Pengelompokan</h6>
                 </div>
                 <div class="card-body p-3 d-flex justify-content-center align-items-center">
-                    <div id="scatter-plot"></div>
-                    <div id="meanshift-plot"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="scatter-plot"></div>
+                        </div>
+
+                        <img  id="imageDendogram" src="http://localhost:5000/api/dendrogram" alt="">
+                        {{-- <div class="col-lg-12">
+                            <svg id="verticalDendrogram" width="100%" height="800"></svg>
+                        </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
+        <script src="https://d3js.org/d3-hierarchy.v1.min.js"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            .link {
+                stroke: #ccc;
+                stroke-width: 1.5;
+            }
 
+            .node {
+                fill: #fff;
+                stroke: #000;
+                stroke-width: 1.5;
+            }
+        </style>
         <script>
+           
             const labelsText = {!! $clusterLabel !!};
             const groupColors = ['red', 'green', 'blue', 'purple', 'orange', 'pink'];
 
@@ -165,60 +187,91 @@
             }));
 
             Plotly.newPlot('scatter-plot', trace, layout);
-            fetch('http://localhost:5000/clusters')
-                .then(response => response.json())
-                .then(data => {
-                    // Extract data for plotting
-                    const clusters = data.clusters;
-                    // Create a 3D scatter plot using Plotly
-                    const trace = {
-                        type: 'scatter3d',
-                        mode: 'markers',
-                        x: [],
-                        y: [],
-                        z: [],
-                        text: [],
-                        marker: {
-                            size: 5,
-                            color: [],
-                            opacity: 0.8
-                        }
-                    };
-                    clusters.forEach(cluster => {
-                        const clusterData = cluster.data;
-                        const clusterId = cluster.cluster_id;
-                        // Append cluster data to the trace
-                        trace.x = trace.x.concat(clusterData.map(point => point[0]));
-                        trace.y = trace.y.concat(clusterData.map(point => point[1]));
-                        trace.z = trace.z.concat(clusterData.map(point => point[2]));
-                        trace.text = trace.text.concat(Array(clusterData.length).fill(labelsText));
-                        const randomColor = getRandomColor();
-                        trace.marker.color = trace.marker.color.concat(Array(clusterData.length).fill(randomColor));
-                    });
+            // fetch('http://localhost:5000/clusters')
+            //     .then(response => response.json())
+            //     .then(data => {
 
-                    const layout = {
-                        title: 'Meanshift Cluster',
-                        scene: {
-                            xaxis: {
-                                title: 'Price'
-                            },
-                            yaxis: {
-                                title: 'Category'
-                            },
-                            zaxis: {
-                                title: 'Rating'
-                            }
-                        },
-                        autosize: true,
-                        height: 600,
-                        width: 600
-                    };
 
-                    const plotConfig = {
-                        responsive: true
-                    };
-                    Plotly.newPlot('meanshift-plot', [trace], layout, plotConfig);
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            //     })
+            //     .catch(error => console.error('Error fetching data:', error));
+            const data = {
+                name: "Cluster MeanShift",
+                children: [{
+                        name: "Cluster 1",
+                        children: [
+
+                        ]
+                    },
+                    {
+                        name: "Cluster 2",
+                        children: [
+
+                        ]
+                    },
+                    {
+                        name: "Cluster 3",
+                        children: [
+
+                        ]
+                    },
+                    {
+                        name: "Cluster 4",
+                        children: [
+
+                        ]
+                    }
+                ]
+            };
+
+            const svg = d3.select("#verticalDendrogram")
+                // .attr("width", 600)
+                .attr("height", 800)
+                .append("g")
+                .attr("transform", "translate(50,50)");
+
+
+            const root = d3.hierarchy(data);
+
+            const treeLayout = d3.tree().size([800, 600]);
+
+            const treeData = treeLayout(root);
+
+            svg.selectAll("path.link")
+                .data(treeData.links())
+                .enter().append("path")
+                .attr("class", "link")
+                .attr("d", d3.linkHorizontal()
+                    .x(d => d.x)
+                    .y(d => d.y))
+                .style("stroke", "#ccc")
+                .style("stroke-width", "1.5px");
+
+            svg.selectAll("g.node")
+                .data(treeData.descendants())
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", d => `translate(${d.x},${d.y})`)
+                .append("circle")
+                .attr("r", 5)
+                .style("fill", "#fff")
+                .style("stroke", "#000")
+                .style("stroke-width", "1.5px");
+
+            svg.selectAll("g.node")
+                .append("text")
+                .attr("dy", "0.31em")
+                .attr("x", d => d.children ? -6 : 6)
+                .attr("text-anchor", d => d.children ? "end" : "start")
+                .text(d => d.data.name)
+                .style("fill", "#000")
+                .style("font-size", "10px");
+
+            svg.selectAll("path.link")
+                .style("fill", "none")
+                .style("stroke-width", "1.5px");
+
+            svg.selectAll("circle.node")
+                .style("stroke", "#000")
+                .style("stroke-width", "1.5px");
         </script>
     @endsection
